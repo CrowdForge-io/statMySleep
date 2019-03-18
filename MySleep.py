@@ -4,7 +4,23 @@ import matplotlib.pyplot as plt
 import calendar
 import datetime
 
+print(""" –\____ Coder: m1ghtfr3e, see more: https://github.com/m1ghtfr3e  ___/–
 
+
+                             .__
+          ()(/ _ `._.--.
+        ((|_.   ) ) )   \_    _.-.-._
+     -- ((|   .' /  (\   \`--'  _)--=' ------ .
+   '    acab.. -' ._)_\   \.-.-._.             .
+  '    ''`````\        \  .  _)--='             .
+ '-----------\/'-. ---- `--"'-------------------.
+|             |\\                                |
+|                                                |
+`----------------------------------------.....---'
+
+
+
+""")
 
 Name = input("Welcome, here. How can I call you?: \n")
 
@@ -12,27 +28,32 @@ print("""
 With this program you can make statistics of your sleep.
 enter your sleep for every day and get plots, average hours of sleep,
 and many else.
+
+[ number of hours please in full numbers or half numbers (e.g. 5 or 6.5) for now! ]
+
 Right now this program is still in development so excuse
 that it's not running perfectly.
 Also updates with more features and options to choose soon!
-
-(At 1.1 your stats will be shown, you can also save your plot
- together with these informations to document it. ..will be
-  automated in this program soon)
 
 Available options: (to select an option, just enter index number)
 
 1  Enter sleep of a week for every day                                     
    See sleep of the week as plot
-   See my total hours of sleep this week + average hours of sleep per night
- 1.1   see log stats for a week
-2  Read my stats
-3  write my stats to a file (csv)   
+   
+   
+ 1.1   See log stats of a week
+       See my total hours of sleep this week + average hours of sleep per night
+       
+ (1.2   create a csv file and write)  use this at the first time or for creting new file, if you wanna update, skip to 3!
+         [the program and the file will be in the same path, please keep them together.]
+ 
+ 
+2  Read my stats (you can read your csv file here, if it's existing)
 """)
 
 def choose_option():
     choose = input("\n What you want to do: \n")
-    while choose == '1':
+    if choose == '1':
         sleep_monday()
         sleep_tuesday()
         sleep_wednesday()
@@ -46,20 +67,23 @@ def choose_option():
             sleep_analize()
             see_stats = input("\n wanna have an overview of your stats?(y/n):  ")
             if see_stats == 'y':
-                log_week()
+                see_week()
+                create_write = input("\n Wanna write to/ create a file?(write/create): \n")
+                if create_write == 'write':
+                    write_csv()
+                if create_write == 'create':
+                    create_csv()
+                    return
                 return
             else:
                 return
         else:
             return
-        
+    # read in progress    
     if choose == '2':
-        stat_read()
-
-    if choose == '3':
-        print("Sorry, not available right now..:(..")
+        read_csv()
         return
-    
+
     return
         
         
@@ -132,21 +156,36 @@ def stat_read():
     print(df)
     return
 
-def log_week():   #first get current date
+def see_week():   #first get current date
     print("\n today's week number: ", datetime.date.today().isocalendar()[1])
     global tday
+    global weekn
     tday = datetime.datetime.now()
+    weekn = datetime.date.today().isocalendar()[1]
     print("\n today's date is: \n", tday)
 
     #Dataframe beschreiben
     dates = tday
-    tags = ["total sleep", "averagesleep"]
+    tags = ["week number", "total sleep", "averagesleep"]
     totsl = pd.Series([sleep_week])
     avrgsl = pd.Series([sleep_weekav])
-    log_df = pd.concat([totsl, avrgsl], axis=1)
+    wknm = pd.Series([weekn])
+    global log_df
+    log_df = pd.concat([wknm, totsl, avrgsl], axis=1)
     log_df.columns = tags
 
     print(log_df)
+    return
+
+def write_csv():
+    log_df.to_csv('MySleep.csv', sep=',', encoding='utf-8', mode='a', header=False, index=False)
+    return
+
+def create_csv():
+    log_df.to_csv('MySleep.csv', sep=',', encoding='utf-8', index=False)
+    return
+
+def read_csv():
     return
 
 
