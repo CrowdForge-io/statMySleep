@@ -18,7 +18,7 @@ print(""" –\____ Coder: m1ghtfr3e, see more: https://github.com/m1ghtfr3e  ___
 |                                                |
 `----------------------------------------.....---'
 
-
+march_19, 2019                  https://github.com/m1ghtfr3e/statMySleep
 
 """)
 
@@ -52,6 +52,7 @@ Available options: (to select an option, just enter index number)
 """)
 
 def choose_option():
+    
     choose = input("\n What you want to do: \n")
     if choose == '1':
         sleep_monday()
@@ -61,15 +62,15 @@ def choose_option():
         sleep_friday()
         sleep_saturday()
         sleep_sunday()
-        plotsee = input("\n see the plot(y/n): ")
+        plotsee = input("\n continue to your plot?(y/n): ")
         if plotsee == 'y':
             sleep_plot()
-            sleep_analize()
+            average_week()
             see_stats = input("\n wanna have an overview of your stats?(y/n):  ")
             if see_stats == 'y':
                 see_week()
-                create_write = input("\n Wanna write to/ create a file?(write/create): \n")
-                if create_write == 'write':
+                create_write = input("\n Wanna write to/ create a file?(update/create): \n")
+                if create_write == 'update':
                     write_csv()
                 if create_write == 'create':
                     create_csv()
@@ -78,12 +79,12 @@ def choose_option():
             else:
                 return
         else:
-            return
-    # read in progress    
+            return  
     if choose == '2':
         read_csv()
         return
-
+    else:
+        print(" I don't know what to do..maybe there's no file?! ")
     return
         
         
@@ -122,8 +123,6 @@ def sleep_sunday():
     sun_sleep = float(input("sleep sat->sun in h: "))
     return sun_sleep
     
-
-
 def sleep_plot():
     """input data of every day for plot..
      x-arryayday_ofweek  y-array: daily_sleep"""
@@ -135,13 +134,20 @@ def sleep_plot():
     plt.xlabel('Tage')
     plt.ylabel('Schlaf in h')
     startx, endx = 1, 7
-    starty, endy = 1, 20
+    starty, endy = 1, 24
     plt.axis([startx, endx, starty, endy])
-    plt.plot(day_ofweek, daily_sleep)
-    plt.show()
+    plt.title("Progress of your sleep this week")
+    plt.plot(day_ofweek, daily_sleep, '--mo')
+    what = input("Do you want to see or save the file?:  ")
+    if what == 'see':
+        plt.show()
+        return
+    if what == 'save':
+        plt.savefig('MySleep_plot.png')
+        return
     return
 
-def sleep_analize():
+def average_week():
     global sleep_week
     global sleep_weekav
     sleep_week = float(mon_sleep + tue_sleep + wed_sleep + th_sleep \
@@ -166,12 +172,23 @@ def see_week():   #first get current date
 
     #Dataframe beschreiben
     dates = tday
-    tags = ["week number", "total sleep", "averagesleep"]
+    tags = ["Name","Date of entry", "week number", "total sleep", "averagesleep",
+            "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    name = pd.Series([Name])
+    ttday = pd.Series([tday])
     totsl = pd.Series([sleep_week])
     avrgsl = pd.Series([sleep_weekav])
     wknm = pd.Series([weekn])
+    mon = pd.Series([mon_sleep])
+    tue = pd.Series([tue_sleep])
+    wed = pd.Series([wed_sleep])
+    thu = pd.Series([th_sleep])
+    fri = pd.Series([fr_sleep])
+    sat = pd.Series([sat_sleep])
+    sun = pd.Series([sun_sleep])
     global log_df
-    log_df = pd.concat([wknm, totsl, avrgsl], axis=1)
+    log_df = pd.concat([name, ttday, wknm, totsl, avrgsl, mon, tue, wed, thu,
+                        fri, sat, sun], axis=1)
     log_df.columns = tags
 
     print(log_df)
@@ -183,9 +200,12 @@ def write_csv():
 
 def create_csv():
     log_df.to_csv('MySleep.csv', sep=',', encoding='utf-8', index=False)
+    print("you can find your file, in the same directory as this program :) ")
     return
 
 def read_csv():
+    reader = pd.read_csv('MySleep.csv', sep='\t')
+    print(reader)
     return
 
 
@@ -194,4 +214,5 @@ def main():
     while True:
         choose_option()
     return
+
 main()
