@@ -18,7 +18,7 @@ print(""" –\____ Coder: m1ghtfr3e, see more: https://github.com/m1ghtfr3e  ___
 |                                                |
 `----------------------------------------.....---'
 
-march_19, 2019
+march_19, 2019                  https://github.com/m1ghtfr3e/statMySleep
 
 """)
 
