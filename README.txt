@@ -1,5 +1,3 @@
-# statMySleep
-(enter hours of your sleep and see stats of it)
 
 Welcome here,
 I'm pretty new to Python so I wanna exercise,
@@ -11,7 +9,7 @@ will be updated the following days :)
 Upload changes or write me for anything!
 
 
-Version 1 :
+Version 1 :  Sleep0verview.py
 
 Optimized to an optional name (through this different ID's can be better organised within the file):
 You can enter hours of slept for every day, from Monday to Sunday.
