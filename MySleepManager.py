@@ -31,29 +31,27 @@ and many else.
 
 [ number of hours please in full numbers or half numbers (e.g. 5 or 6.5) for now! ]
 
-Right now this program is still in development so excuse
-that it's not running perfectly.
-Also updates with more features and options to choose soon!
+ [Right now this program is still in development so excuse
+  that it's not running perfectly.
+  Also updates with more features and options to choose soon!]
 
 Available options: (to select an option, just enter index number)
 
-1  Enter sleep of a week for every day                                     
-   See sleep of the week as plot
-   
-   
- 1.1   See log stats of a week
-       See my total hours of sleep this week + average hours of sleep per night
+1  Enter sleep of a week for every day
+
+  >   See sleep of the week as plot
+  >   See log stats of a week
+  >   See my total hours of sleep this week + average hours of sleep per night
+  >   See my plot or save it (change filename afterwards, else the older existing will be replaced!)
+  >   create / update 'MySleep.csv' -file (file wil be in same path as you placed your program)
        
- (1.2   create a csv file and write)  use this at the first time or for creting new file, if you wanna update, skip to 3!
-         [the program and the file will be in the same path, please keep them together.]
- 
- 
 2  Read my stats (you can read your csv file here, if it's existing)
 """)
 
+ # !fix loops!
 def choose_option():
     
-    choose = input("\n What you want to do: \n")
+    choose = input("\n What you want to do: \n")  # asks for every day
     if choose == '1':
         sleep_monday()
         sleep_tuesday()
@@ -62,14 +60,14 @@ def choose_option():
         sleep_friday()
         sleep_saturday()
         sleep_sunday()
-        plotsee = input("\n continue to your plot?(y/n): ")
+        plotsee = input("\n continue to your plot?(y/n): ")   # continue with plot
         if plotsee == 'y':
             sleep_plot()
             average_week()
-            see_stats = input("\n wanna have an overview of your stats?(y/n):  ")
+            see_stats = input("\n wanna have an overview of your stats?(y/n):  ")   # see stats
             if see_stats == 'y':
                 see_week()
-                create_write = input("\n Wanna write to/ create a file?(update/create): \n")
+                create_write = input("\n Wanna write to/ create a file?(update/create): \n")  # create a new or update an existing file
                 if create_write == 'update':
                     write_csv()
                 if create_write == 'create':
@@ -87,7 +85,7 @@ def choose_option():
         print(" I don't know what to do..maybe there's no file?! ")
     return
         
-        
+ # input of hours of sleep for every day       
 def sleep_monday():
     global mon_sleep
     mon_sleep = float(input("sleep sun->mon i h: "))
@@ -122,7 +120,8 @@ def sleep_sunday():
     global sun_sleep
     sun_sleep = float(input("sleep sat->sun in h: "))
     return sun_sleep
-    
+
+ # plot generate -> save or see   
 def sleep_plot():
     """input data of every day for plot..
      x-arryayday_ofweek  y-array: daily_sleep"""
@@ -147,6 +146,7 @@ def sleep_plot():
         return
     return
 
+ # statistics of the sleep in week
 def average_week():
     global sleep_week
     global sleep_weekav
@@ -157,12 +157,8 @@ def average_week():
     print("average h of your sleep: ", sleep_weekav)
     return
 
-def stat_read():
-    df = pd.read_csv('MySleep.csv', sep='\t')
-    print(df)
-    return
-
-def see_week():   #first get current date
+ # see my current week
+def see_week():                #first get current date
     print("\n today's week number: ", datetime.date.today().isocalendar()[1])
     global tday
     global weekn
@@ -170,7 +166,7 @@ def see_week():   #first get current date
     weekn = datetime.date.today().isocalendar()[1]
     print("\n today's date is: \n", tday)
 
-    #Dataframe beschreiben
+    # define DataFrame
     dates = tday
     tags = ["Name","Date of entry", "week number", "total sleep", "averagesleep",
             "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
@@ -194,15 +190,18 @@ def see_week():   #first get current date
     print(log_df)
     return
 
+ # updates the file MySleep
 def write_csv():
     log_df.to_csv('MySleep.csv', sep=',', encoding='utf-8', mode='a', header=False, index=False)
     return
 
+ # creates the file MySleep
 def create_csv():
     log_df.to_csv('MySleep.csv', sep=',', encoding='utf-8', index=False)
     print("you can find your file, in the same directory as this program :) ")
     return
 
+ # reads the file MySleep within your interpreter
 def read_csv():
     reader = pd.read_csv('MySleep.csv', sep='\t')
     print(reader)
